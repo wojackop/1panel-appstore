@@ -5,7 +5,7 @@ title: Google Analytics 的简单、快速、注重隐私的替代方案
 description: Google Analytics 的简单、快速、注重隐私的替代方案
 additionalProperties:
   key: umami
-  name: Umami
+  name: Umami-mysql
   tags:
     - Tool
   shortDescZh: Google Analytics 的简单、快速、注重隐私的替代方案
