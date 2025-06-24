@@ -4,7 +4,7 @@ tags:
 title: 支持多家云存储的云盘系统
 description: 支持多家云存储的云盘系统
 additionalProperties:
-  key: cloudreve
+  key: cloudreve-mysql
   name: Cloudreve-mysql
   tags:
     - Storage
