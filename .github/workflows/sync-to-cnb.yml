@@ -26,5 +26,5 @@ jobs:
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
         run: |
           git remote remove cnb || true
-          git remote add cnb "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/Liiiu/Blog.git"
+          git remote add cnb "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/Liiiu/appstore.git"
           git push cnb main --force
