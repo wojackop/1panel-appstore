@@ -27,5 +27,5 @@ jobs:
           git add .
           git commit -m "${{ github.event.head_commit.message }}==>[$(date +"%Y-%m-%d %H:%M:%S")]"
           git branch -M main
-          git remote add origin "https://${{ secrets.CNB_USERNAME }}:${{ secrets.CNB_TOKEN }}@cnb.cool/appstore.git"
+          git remote add origin "https://${{ secrets.CNB_USERNAME }}:${{ secrets.CNB_TOKEN }}@cnb.cool/liiiu/appstore.git"
           git push --force --quiet origin main
