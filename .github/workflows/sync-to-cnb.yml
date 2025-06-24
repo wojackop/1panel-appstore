@@ -1,4 +1,4 @@
-name: Sync commits to CNB
+name: Sync commits to CNB (force)
 
 on:
   push:
@@ -20,10 +20,11 @@ jobs:
           git config --global user.name "${{ secrets.CNB_USERNAME }}"
           git config --global user.email "${{ secrets.CNB_USERNAME }}@users.noreply.github.com"
 
-      - name: Add CNB remote and push history
+      - name: Add CNB remote and force push
         env:
           CNB_USERNAME: ${{ secrets.CNB_USERNAME }}
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
         run: |
-          git remote add origin "https://${{ secrets.CNB_USERNAME }}:${{ secrets.CNB_TOKEN }}@cnb.cool/Liiiu/Blog.git"
-          git push
+          git remote remove cnb || true
+          git remote add cnb "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/Liiiu/Blog.git"
+          git push cnb main --force
