@@ -13,18 +13,19 @@ jobs:
       - name: Checkout GitHub repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config --global user.name "${{ secrets.CNB_USERNAME }}"
-          git config --global user.email "${{ secrets.CNB_USERNAME }}@users.noreply.github.com"
+          ref: main
 
       - name: Add CNB remote and force push
         env:
           CNB_USERNAME: ${{ secrets.CNB_USERNAME }}
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
         run: |
-          git remote remove cnb || true
-          git remote add cnb "https://${CNB_USERNAME}:${CNB_TOKEN}@cnb.cool/Liiiu/appstore.git"
-          git push cnb main --force
+          rm -rf .git
+          git init
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add .
+          git commit -m "${{ github.event.head_commit.message }}==>[$(date +"%Y-%m-%d %H:%M:%S")]"
+          git branch -M main
+          git remote add origin "https://${{ secrets.CNB_USERNAME }}:${{ secrets.CNB_TOKEN }}@cnb.cool/appstore.git"
+          git push --force --quiet origin main
