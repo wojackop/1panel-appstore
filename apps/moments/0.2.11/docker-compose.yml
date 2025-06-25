@@ -5,7 +5,7 @@ services:
     container_name: ${CONTAINER_NAME}
     restart: always
     environment:
-      port: ${PANEL_APP_PORT_HTTP}
+      port: 3000
       JWT_KEY: ${PANEL_MOMENTS_JWT_KEY}
       CORS_ORIGIN: ${PANEL_MOMENTS_CORS_ORIGIN}
       ENABLE_SWAGGER: ${PANEL_MOMENTS_ENABLE_SWAGGER}

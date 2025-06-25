@@ -20,7 +20,7 @@ additionalProperties:
     - default: "rTxo391YxfvU2j"
       envKey: PANEL_MOMENTS_JWT_KEY
       labelEn: JWT Secret
-      labelZh: 登录密钥
+      labelZh: JWT 安全密钥
       label:
         en: JWT Secret
         ja: JWTシークレット
