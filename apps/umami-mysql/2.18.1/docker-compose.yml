@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   umami:
     image: ghcr.nju.edu.cn/umami-software/umami:mysql-v2.18.1

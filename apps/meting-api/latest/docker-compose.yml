@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   meting-api:
     container_name: ${CONTAINER_NAME}
