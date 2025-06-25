@@ -20,7 +20,7 @@ additionalProperties:
     - default: "my-very-secret"
       envKey: PANEL_ECH0_JWT_SECRET
       labelEn: JWT Secret
-      labelZh: 登录密钥
+      labelZh: JWT 安全密钥
       label:
         en: JWT Secret
         ja: JWTシークレット
@@ -28,7 +28,7 @@ additionalProperties:
         pt-br: Segredo JWT
         ru: JWT секрет
         ko: JWT 시크릿
-        zh: 登录密钥
+        zh: JWT 安全密钥
         zh-Hant: 登錄密鑰
       required: true
       type: password
