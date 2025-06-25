@@ -1,0 +1,66 @@
+additionalProperties:
+  formFields:
+    - default: 3003
+      envKey: PANEL_APP_PORT_HTTP
+      labelEn: HTTP Port
+      labelZh: HTTP 端口
+      label:
+        en: HTTP Port
+        ja: ポート
+        ms: Port
+        pt-br: Porta
+        ru: Порт
+        ko: 포트
+        zh: HTTP 端口
+        zh-Hant: HTTP 連接埠
+      required: true
+      rule: paramPort
+      type: number
+
+    - default: "rTxo391YxfvU2j"
+      envKey: PANEL_MOMENTS_JWT_KEY
+      labelEn: JWT Secret
+      labelZh: 登录密钥
+      label:
+        en: JWT Secret
+        ja: JWTシークレット
+        ms: Rahsia JWT
+        pt-br: Segredo JWT
+        ru: JWT секрет
+        ko: JWT 시크릿
+        zh: 登录密钥
+        zh-Hant: 登錄密鑰
+      required: true
+      type: password
+
+    - default: ""
+      envKey: PANEL_MOMENTS_CORS_ORIGIN
+      labelEn: CORS Origins
+      labelZh: CORS 允许的域名
+      label:
+        en: CORS Origins (comma separated)
+        ja: CORS 許可ドメイン（カンマ区切り）
+        ms: Asal CORS (pisahkan dengan koma)
+        pt-br: Origens CORS (separadas por vírgula)
+        ru: Разрешённые домены CORS (через запятую)
+        ko: CORS 허용 도메인 (쉼표로 구분)
+        zh: CORS 允许的域名（逗号分隔）
+        zh-Hant: CORS 允許的域名（逗號分隔）
+      required: false
+      type: text
+
+    - default: "true"
+      envKey: PANEL_MOMENTS_ENABLE_SWAGGER
+      labelEn: Enable Swagger
+      labelZh: 启用 Swagger
+      label:
+        en: Enable Swagger (true/false)
+        ja: Swagger を有効化 (true/false)
+        ms: Aktifkan Swagger (true/false)
+        pt-br: Ativar Swagger (true/false)
+        ru: Включить Swagger (true/false)
+        ko: Swagger 활성화 (true/false)
+        zh: 启用 Swagger (true/false)
+        zh-Hant: 啟用 Swagger (true/false)
+      required: false
+      type: text

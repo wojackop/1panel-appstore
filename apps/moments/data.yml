@@ -1,0 +1,32 @@
+name: Moments
+tags:
+  - 博客
+  - 发布平台
+  - 自托管
+title: 极简朋友圈发布平台
+description: 一款轻量、优雅的自托管朋友圈系统，支持匿名记录与数据持久化
+additionalProperties:
+  key: moments
+  name: Moments
+  tags:
+    - WebSite
+    - Tool
+  shortDescZh: 极简朋友圈发布系统，支持本地存储与自托管
+  shortDescEn: A minimalist, self-hosted friend-circle publishing platform
+  type: website
+  crossVersionUpdate: true
+  limit: 0
+  website: https://github.com/kingwrcy/moments
+  github: https://github.com/kingwrcy/moments
+  document: https://github.com/kingwrcy/moments
+  description:
+    en: A simple and self-hosted friend-circle style publishing platform with persistent storage and JWT support.
+    zh: 一款极简、自托管的朋友圈发布系统，支持数据持久化和 JWT 登录验证。
+    zh-Hant: 一個簡約、自託管的朋友圈發布平台，支援資料持久化與 JWT 登入驗證。
+    ja: シンプルで自己ホスト可能な友達サークル公開プラットフォーム。データ永続化とJWT認証に対応。
+    ms: Platform penerbitan kenalan yang ringkas dan kendiri dengan storan kekal dan sokongan JWT.
+    pt-br: Uma plataforma de publicação estilo rede social pessoal, auto-hospedada e simples, com suporte a JWT.
+    ru: Простая, автономная платформа публикации в стиле социальной сети с поддержкой JWT и постоянным хранилищем данных.
+    ko: 간단하고 셀프 호스팅 가능한 소셜 퍼블리싱 플랫폼, JWT 및 데이터 저장 지원.
+  architectures:
+    - amd64

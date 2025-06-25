@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  moments:
+    image: kingwrcy/moments:0.2.11
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    environment:
+      port: ${PANEL_APP_PORT_HTTP}
+      JWT_KEY: ${PANEL_MOMENTS_JWT_KEY}
+      CORS_ORIGIN: ${PANEL_MOMENTS_CORS_ORIGIN}
+      ENABLE_SWAGGER: ${PANEL_MOMENTS_ENABLE_SWAGGER}
+    ports:
+      - "${PANEL_APP_PORT_HTTP}:3000"
+    volumes:
+      - ./data:/app/data
+    labels:
+      createdBy: "Apps"
+    networks:
+      - 1panel-network
+
+networks:
+  1panel-network:
+    external: true

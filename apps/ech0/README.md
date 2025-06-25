@@ -1,0 +1,103 @@
+## Ech0 — 开源、自托管、轻量的发布平台 📘
+
+**Ech0** 是一款专注思想流动的轻量级自托管发布平台，适合快速分享想法、文字和链接。界面简洁直观，强调体验与数据掌控。
+
+------
+
+### 核心优势
+
+- **极致轻量**：可执行文件与镜像体积 <30 MB，采用单一 SQLite 存储
+- **极速部署**：一条命令即可安装运行
+- **纯净写作**：支持 Markdown 编辑与实时预览，无干扰环境
+- **数据主权**：所有内容保存在本地，支持 RSS 订阅
+- **免费开源**：MIT 许可，无广告、无追踪、无需订阅
+- **多端适配**：响应式设计，支持桌面与移动设备
+- **PWA 支持**：可安装为 Web 应用
+- **待办集成**：自带 Todo 管理功能，支持记录和计划
+- **实例互联**：支持 Ech0 Connect 功能，实现多个实例之间订阅同步
+- **媒体集成**：支持本地音乐播放和 B 站视频嵌入
+- **富媒体卡片**：支持链接、GitHub 项目等丰富信息展示
+- **高级自定义**：支持自定义样式与脚本扩展界面功能
+
+------
+
+### 🚀 部署方式
+
+**脚本一键部署（推荐）**：
+
+```
+bash
+
+
+复制编辑
+curl -fsSL "http://echo.soopy.cn/install.sh" -o install_ech0.sh && bash install_ech0.sh
+```
+
+**Docker 部署**：
+
+```
+bash复制编辑docker run -d \
+  --name ech0 \
+  -p 6277:6277 \
+  -v /opt/ech0/data:/app/data \
+  -e JWT_SECRET="你的 secret" \
+  sn0wl1n/ech0:latest
+```
+
+*首次注册用户将自动成为管理员；数据保存在映射目录*
+
+**Docker Compose 部署**：
+ 把官方 `docker-compose.yml` 放入目录后，执行：
+
+```
+bash
+
+
+复制编辑
+docker-compose up -d
+```
+
+------
+
+### 🔄 升级方式
+
+- **Docker CLI**：
+
+  ```
+  bash复制编辑docker stop ech0
+  docker rm ech0
+  docker pull sn0wl1n/ech0:latest
+  docker run ... # 启动新容器
+  ```
+
+- **Docker Compose**：
+
+  ```
+  bash复制编辑docker-compose pull
+  docker-compose up -d --force-recreate
+  docker image prune -f
+  ```
+
+------
+
+### 🧠 常见问题（FAQ）
+
+1. **什么是 Ech0？** 一款轻量级的开源平台，专为快速发布想法和链接设计。
+2. **是否免费？** 完全免费、无广告，遵循 MIT 开源协议。
+3. **如何备份数据？** 全部内容保存在本地 SQLite 文件，备份即可恢复。
+4. **支持 RSS 吗？** 是，内置 RSS 订阅功能。
+5. **为什么无法发布内容？** 当前版本仅支持管理员发布，首位注册用户即为管理员。
+
+------
+
+### 🚧 开发环境 & 致谢
+
+- **后端**：Go 1.24.3+
+- **前端**：NodeJS v22 / PNPM
+- 致谢：使用了 Gin、Md-Editor-V3、Figma 等技术与工具开发
+
+------
+
+### 💝 支持方式
+
+欢迎收藏（Star）和赞助项目（通过「爱发电」等渠道），支持项目前行！

@@ -13,7 +13,7 @@ additionalProperties:
     - Database
   shortDescZh: 支持自然语言查询的数据库管理工具
   shortDescEn: Lightweight DB manager with natural language querying
-  type: website
+  type: Tool
   crossVersionUpdate: true
   limit: 0
   website: https://whodb.com/
