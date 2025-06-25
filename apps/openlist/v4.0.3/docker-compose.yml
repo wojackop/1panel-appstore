@@ -1,0 +1,20 @@
+services:
+  openlist:
+    restart: always
+    volumes:
+      - './data:/opt/openlist/data'
+    ports:
+      - '${PANEL_APP_PORT_HTTP}:5244'
+      - '${PANEL_APP_PORT_S3}:5245'
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+      - TZ=UTC
+    container_name: ${CONTAINER_NAME}
+    image: openlistteam/openlist:v4.0.3
+    labels:  
+      createdBy: "Apps"
+networks:  
+  1panel-network:  
+    external: true
