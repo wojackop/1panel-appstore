@@ -1,12 +1,12 @@
-name: WhoDB
+name: WhoDB-OpenAI
 tags:
   - 数据库管理
   - 工具
 title: 轻量、高效、支持自然语言的数据库管理平台
-description: 轻量、高效、支持自然语言对话的数据库管理工具，支持多种数据库与可视化操作
+description: 轻量、高效、支持自然语言对话的数据库管理工具，支持多种数据库与可视化操作，该应用仅适配openai接口，未适配Ollama
 additionalProperties:
-  key: whodb
-  name: whoDB
+  key: whodb-openai
+  name: whoDB-OpenAI
   tags:
     - Tool
   shortDescZh: 支持自然语言查询的数据库管理工具

@@ -33,38 +33,9 @@ additionalProperties:
       required: false
       type: password
 
-    - default: ""
+    - default: "https://api.openai.com/v1"
       envKey: WHODB_OPENAI_ENDPOINT
       labelEn: OpenAI Endpoint
       labelZh: OpenAI 接口地址
       required: false
       type: text
-
-    - default: ""
-      envKey: WHODB_ANTHROPIC_API_KEY
-      labelEn: Anthropic API Key
-      labelZh: Anthropic API 密钥
-      required: false
-      type: password
-
-    - default: ""
-      envKey: WHODB_ANTHROPIC_ENDPOINT
-      labelEn: Anthropic Endpoint
-      labelZh: Anthropic 接口地址
-      required: false
-      type: text
-
-    - default: ""
-      envKey: WHODB_OLLAMA_HOST
-      labelEn: Ollama Host
-      labelZh: Ollama 主机地址
-      required: false
-      type: text
-
-    - default: "11434"
-      envKey: WHODB_OLLAMA_PORT
-      labelEn: Ollama Port
-      labelZh: Ollama 端口
-      required: false
-      rule: paramPort
-      type: number
