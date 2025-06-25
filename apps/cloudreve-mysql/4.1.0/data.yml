@@ -1,6 +1,6 @@
 additionalProperties:
   formFields:
-    - default: postgres
+    - default: mysql
       envKey: PANEL_DB_TYPE
       labelEn: Database Service
       labelZh: 数据库服务

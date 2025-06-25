@@ -9,7 +9,7 @@ services:
       - ${PANEL_APP_PORT_HTTP}:3000
     environment:
       DATABASE_TYPE: mysql
-      REDIS_URL: redis://:${PANEL_REDIS_PASSWORD}@Redis:6379
+      REDIS_URL: redis://:${PANEL_REDIS_ROOT_PASSWORD}@Redis:6379
       DATABASE_URL: mysql://${PANEL_DB_USER}:${PANEL_DB_USER_PASSWORD}@${PANEL_DB_HOST}:${PANEL_DB_PORT}/${PANEL_DB_NAME}
       APP_SECRET: ${HASH_SALT}
     networks:
