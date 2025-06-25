@@ -77,7 +77,7 @@ GIT_REPO="https://github.com/willow-god/appstore"
 
 如发现配置错误或希望新增应用，欢迎在 Issues 区提交反馈：
 
-- 🛠 [本仓库 Issues](https://github.com/Liiiu/appstore/issues)
+- 🛠 [本仓库 Issues](https://github.com/willow-god/appstore/issues)
 
 > ⚠️ 本项目仅对仓库中提供的应用内容提供支持。1Panel 本体问题请前往 [1Panel 主项目](https://github.com/1Panel-dev/1Panel/issues) 提问。
 
