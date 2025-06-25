@@ -4,6 +4,7 @@
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
   "prCreation": "immediate",
+  "logLevel": "debug"
   "packageRules": [
     {
       "matchDatasources": ["docker"],
@@ -14,6 +15,13 @@
       "matchDatasources": ["docker"],
       "matchFileNames": ["apps/**/docker-compose.yml"],
       "versioning": "semver"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.nju.edu.cn/umami-software/umami"],
+      "replaceString": "ghcr.io/umami-software/umami",
+      "versioning": "semver",
+      "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$"
     }
   ]
 }
