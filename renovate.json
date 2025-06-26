@@ -4,16 +4,16 @@
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
   "prCreation": "immediate",
-  "logLevel": "debug"
+  "logLevel": "debug",
   "packageRules": [
     {
       "matchDatasources": ["docker"],
-      "matchFileNames": ["apps/meting-api/**/docker-compose.yml"],
+      "matchFileNames": ["apps/meting-api/*/docker-compose.yml"],
       "enabled": false
     },
     {
       "matchDatasources": ["docker"],
-      "matchFileNames": ["apps/**/docker-compose.yml"],
+      "matchFileNames": ["apps/*/*/docker-compose.yml"],
       "versioning": "semver"
     },
     {
