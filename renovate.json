@@ -17,7 +17,7 @@
     },
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.nju.edu.cn/umami-software/umami"],
+      "matchPackageNames": ["ghcr.io/umami-software/umami"],
       "versioning": "semver",
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$"
     }
