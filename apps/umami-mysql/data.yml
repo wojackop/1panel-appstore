@@ -27,3 +27,4 @@ additionalProperties:
     ko: Google Analytics에 대한 간단하고 빠르며 개인 정보 보호 중심의 대안
   architectures:
     - amd64
+    - arm64

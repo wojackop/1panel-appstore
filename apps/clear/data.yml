@@ -12,7 +12,7 @@ additionalProperties:
     - Tool
   shortDescZh: 简洁高效的待办事项管理应用，支持容器化部署与多平台适配
   shortDescEn: A modern, efficient to-do management app with container deployment and multi-platform support
-  type: tool
+  type: website
   crossVersionUpdate: true
   limit: 0
   website: https://github.com/WindyDante/Clear

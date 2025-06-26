@@ -30,3 +30,4 @@ additionalProperties:
     ko: Markdown, RSS를 지원하는 가볍고 미니멀한 셀프 호스팅 게시 플랫폼입니다.
   architectures:
     - amd64
+    - arm64
