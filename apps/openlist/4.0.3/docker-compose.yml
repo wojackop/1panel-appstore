@@ -13,7 +13,7 @@ services:
       - UMASK=022
       - TZ=UTC
     container_name: ${CONTAINER_NAME}
-    image: openlistteam/openlist:v4.0.3
+    image: openlistteam/openlist:v4.0.4
     labels:  
       createdBy: "Apps"
 networks:  
