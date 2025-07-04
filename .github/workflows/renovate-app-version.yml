@@ -8,46 +8,64 @@ on:
       manual-trigger:
         description: 'Manually trigger Renovate'
         default: ''
+
 jobs:
   update-app-version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Configure repo
+      - name: Configure git
         run: |
           git config --local user.email "githubaction@githubaction.com"
           git config --local user.name "github-action update-app-version"
 
-      - name: Get list of updated files by the last commit in this branch separated by space
+      - name: Get list of updated files by the last commit
         id: updated-files
         run: |
-          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | tr '\n' ' ')"
+          echo "files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Run renovate-app-version.sh on updated files
+        id: rename
         run: |
-          IFS=' ' read -ra files <<< "${{ steps.updated-files.outputs.files }}"
+          chmod +x .github/workflows/renovate-app-version.sh
 
-          for file in "${files[@]}"; do
+          files="${{ steps.updated-files.outputs.files }}"
+          for file in $files; do
             if [[ $file == *"docker-compose.yml"* ]]; then
               app_name=$(echo $file | cut -d'/' -f 2)
               old_version=$(echo $file | cut -d'/' -f 3)
-              chmod +x .github/workflows/renovate-app-version.sh
+
+              # Extract version from image (first service)
+              service=$(yq '.services | keys | .[0]' $file)
+              image=$(yq ".services.${service}.image" $file)
+
+              if [[ "$image" == *":"* ]]; then
+                new_version=$(cut -d ":" -f2- <<< "$image")
+                trimmed_version=${new_version/#"v"}
+              else
+                trimmed_version=""
+              fi
+
+              echo "app_name=$app_name" >> $GITHUB_OUTPUT
+              echo "old_version=$old_version" >> $GITHUB_OUTPUT
+              echo "new_version=$trimmed_version" >> $GITHUB_OUTPUT
+
               .github/workflows/renovate-app-version.sh $app_name $old_version
             fi
           done
 
       - name: Commit & Push Changes
         run: |
-          IFS=' ' read -ra files <<< "${{ steps.updated-files.outputs.files }}"
+          app_name="${{ steps.rename.outputs.app_name }}"
+          old_version="${{ steps.rename.outputs.old_version }}"
+          new_version="${{ steps.rename.outputs.new_version }}"
 
-          for file in "${files[@]}"; do
-            if [[ $file == *"docker-compose.yml"* ]]; then
-              app_name=$(echo $file | cut -d'/' -f 2)
-              git add "apps/$app_name/*" && git commit -m "Update app version [skip ci]" --no-verify && git push || true
-            fi
-          done
-
+          if [[ -n "$app_name" && -n "$new_version" ]]; then
+            git add "apps/$app_name/*"
+            git commit -m "chore($app_name): update version from $old_version to $new_version [skip ci]" --no-verify || echo "Nothing to commit"
+            git push
+          fi
