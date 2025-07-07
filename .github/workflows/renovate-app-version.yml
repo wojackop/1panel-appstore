@@ -66,6 +66,6 @@ jobs:
 
           if [[ -n "$app_name" && -n "$new_version" ]]; then
             git add "apps/$app_name/*"
-            git commit -m "chore($app_name): update version from $old_version to $new_version [skip ci]" --no-verify || echo "Nothing to commit"
+            git commit -m "chore($app_name): 将版本从 $old_version 升级到 $new_version [skip ci]" --no-verify || echo "无内容可提交"
             git push
           fi
