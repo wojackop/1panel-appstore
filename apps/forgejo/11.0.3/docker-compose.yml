@@ -10,6 +10,7 @@ services:
       - FORGEJO__database__NAME=${PANEL_DB_NAME}
       - FORGEJO__database__USER=${PANEL_DB_USER}
       - FORGEJO__database__PASSWD=${PANEL_DB_USER_PASSWORD}
+      - GITEA_CUSTOM=/data/gitea
     restart: always
     networks:
       - 1panel-network
