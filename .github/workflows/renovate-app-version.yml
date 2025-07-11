@@ -66,6 +66,29 @@ jobs:
 
           if [[ -n "$app_name" && -n "$new_version" ]]; then
             git add "apps/$app_name/*"
-            git commit -m "chore($app_name): 将版本从 $old_version 升级到 $new_version [skip ci]" --no-verify || echo "无内容可提交"
+            git commit -m "📈将应用 $app_name 的版本从 $old_version 升级到 $new_version [skip ci]" --no-verify || echo "无内容可提交"
             git push
           fi
+
+      - name: Try auto-merge PR after version bump
+        if: github.ref_name != 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 获取当前分支名
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+          echo "Current branch: $branch_name"
+
+          # 查找对应的 PR 编号
+          pr_number=$(gh pr list --state open --head "$branch_name" --json number -q '.[0].number')
+
+          if [ -n "$pr_number" ]; then
+            echo "Found PR #$pr_number, attempting to merge..."
+
+            # 自动合并 PR（使用 squash 或 merge 均可）
+            gh pr merge "$pr_number" --merge --delete-branch --admin
+          else
+            echo "No PR found for branch $branch_name"
+          fi
+

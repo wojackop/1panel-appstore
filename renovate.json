@@ -4,10 +4,24 @@
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
   "prCreation": "immediate",
+
+  "hostRules": [
+    {
+      "hostType": "docker",
+      "matchHost": "codeberg.org",
+      "registryUrls": ["https://codeberg.org"]
+    }
+  ],
+
   "packageRules": [
     {
       "matchDatasources": ["docker"],
       "matchFileNames": ["apps/meting-api/*/docker-compose.yml"],
+      "enabled": false
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchFileNames": ["apps/chatnio/*/docker-compose.yml"],
       "enabled": false
     },
     {

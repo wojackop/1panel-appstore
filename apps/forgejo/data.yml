@@ -1,0 +1,31 @@
+name: Forgejo
+tags:
+  - DevOps
+title: 社区驱动的代码托管平台
+description: 社区驱动的 Gitea 分支，致力于自由、去中心化的代码托管
+additionalProperties:
+  key: forgejo
+  name: Forgejo
+  tags:
+    - DevOps
+  shortDescZh: 社区驱动的代码托管平台
+  shortDescEn: Community-driven code hosting platform
+  description:
+    en: A community-driven, self-hosted Git service. A soft fork of Gitea focused on freedom, community, and transparency.
+    ja: コミュニティ主導のセルフホスティング型Gitサービス。Giteaのソフトフォークで、自由と透明性を重視。
+    ms: Perkhidmatan Git dihoskan sendiri yang dipacu oleh komuniti. Percabangan lembut Gitea yang memfokuskan pada kebebasan dan ketelusan.
+    pt-br: Um serviço Git auto-hospedado conduzido pela comunidade. Um fork suave do Gitea com foco na liberdade e transparência.
+    ru: Самостоятельно размещаемый Git-сервис, управляемый сообществом. Форк Gitea с акцентом на свободу и прозрачность.
+    ko: 커뮤니티 주도의 자체 호스팅 Git 서비스. 자유와 투명성을 중시하는 Gitea의 소프트 포크입니다.
+    zh-Hant: 社群驅動的自託管 Git 服務，是 Gitea 的分支，重視自由與透明。
+    zh: 社区驱动的自托管 Git 服务，是 Gitea 的分支，重视自由与透明。
+  type: website
+  crossVersionUpdate: false
+  limit: 0
+  recommend: 55
+  website: https://forgejo.org/
+  github: https://code.forgejo.org/forgejo/forgejo
+  document: https://forgejo.org/docs/
+  architectures:
+    - amd64
+    - arm64
