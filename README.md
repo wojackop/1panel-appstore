@@ -96,4 +96,3 @@ GIT_REPO="https://github.com/willow-god/appstore"
 欢迎参考官方教程，构建你自己的 App Store 仓库：
 
 👉 [📘 官方指南：如何提交自己想要的应用](https://github.com/1Panel-dev/appstore/wiki/如何提交自己想要的应用)
-
