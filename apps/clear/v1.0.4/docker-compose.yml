@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
   clear:
     image: eastwind996/clear:v1.0.4
