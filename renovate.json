@@ -10,6 +10,11 @@
       "hostType": "docker",
       "matchHost": "codeberg.org",
       "registryUrls": ["https://codeberg.org"]
+    },
+    {
+      "hostType": "docker",
+      "matchHost": "code.forgejo.org",
+      "registryUrls": ["https://code.forgejo.org"]
     }
   ],
 

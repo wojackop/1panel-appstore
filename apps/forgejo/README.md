@@ -13,9 +13,9 @@ Forgejo 是一个 **社区驱动** 的代码托管平台，源自 Gitea 的分�
 
 ## 📚 文档与链接
 
-- 官网：🌐 [https://forgejo.org](https://forgejo.org)
-- 文档：📘 [https://forgejo.org/docs/](https://forgejo.org/docs/)
-- 源码：🧑‍💻 [https://code.forgejo.org/forgejo/forgejo](https://code.forgejo.org/forgejo/forgejo)
+- 官网：🌐 [https://forgejo.org](https://forgejo.org/)
+- 文档：📘 https://forgejo.org/docs/
+- 源码：🧑‍💻 https://code.forgejo.org/forgejo/forgejo
 
 ## 🐳 Docker 部署（示例）
 
