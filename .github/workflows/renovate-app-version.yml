@@ -75,20 +75,41 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 获取当前分支名
           branch_name=$(git rev-parse --abbrev-ref HEAD)
-
           echo "Current branch: $branch_name"
 
-          # 查找对应的 PR 编号
+          # 合并主分支以避免 not mergeable
+          git fetch origin main
+          git merge origin/main --no-edit || git rebase origin/main
+          git push origin "$branch_name"
+
+          # 获取 PR 编号
           pr_number=$(gh pr list --state open --head "$branch_name" --json number -q '.[0].number')
+          if [ -z "$pr_number" ]; then
+            echo "No PR found for branch $branch_name"
+            exit 0
+          fi
 
-          if [ -n "$pr_number" ]; then
-            echo "Found PR #$pr_number, attempting to merge..."
+          echo "Found PR #$pr_number, checking mergeability..."
 
-            # 自动合并 PR（使用 squash 或 merge 均可）
+          # 等待 PR 可合并状态（最多重试 10 次）
+          for i in {1..10}; do
+            is_mergeable=$(gh pr view "$pr_number" --json mergeable -q '.mergeable')
+            echo "Mergeable status: $is_mergeable"
+            if [ "$is_mergeable" == "MERGEABLE" ]; then
+              break
+            fi
+            echo "PR not mergeable yet, retrying in 5s... ($i/10)"
+            sleep 5
+          done
+
+          # 再次检查并尝试合并
+          is_mergeable=$(gh pr view "$pr_number" --json mergeable -q '.mergeable')
+          if [ "$is_mergeable" == "MERGEABLE" ]; then
+            echo "PR is mergeable now, merging..."
             gh pr merge "$pr_number" --merge --delete-branch --admin
           else
-            echo "No PR found for branch $branch_name"
+            echo "PR is still not mergeable, skipping merge."
           fi
+
 

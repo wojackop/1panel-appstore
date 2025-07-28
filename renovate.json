@@ -15,10 +15,20 @@
       "hostType": "docker",
       "matchHost": "code.forgejo.org",
       "registryUrls": ["https://code.forgejo.org"]
+    },
+    {
+      "hostType": "docker",
+      "matchHost": "ghcr.430070.xyz",
+      "registryUrls": ["https://ghcr.430070.xyz"]
     }
   ],
 
   "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchFileNames": [".github/**"],
+      "enabled": false
+    },
     {
       "matchDatasources": ["docker"],
       "matchFileNames": ["apps/meting-api/*/docker-compose.yml"],
@@ -36,7 +46,7 @@
     },
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/umami-software/umami"],
+      "matchPackageNames": ["ghcr.430070.xyz/umami-software/umami"],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
       "versioning": "semver"
     }
