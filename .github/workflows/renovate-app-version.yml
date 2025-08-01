@@ -31,17 +31,19 @@ jobs:
       - name: Run renovate-app-version.sh on updated files
         id: rename
         run: |
+          set -e
           chmod +x .github/workflows/renovate-app-version.sh
 
           files="${{ steps.updated-files.outputs.files }}"
+          declare -a changed_apps=()
           for file in $files; do
             if [[ $file == *"docker-compose.yml"* ]]; then
               app_name=$(echo $file | cut -d'/' -f 2)
               old_version=$(echo $file | cut -d'/' -f 3)
 
-              # Extract version from image (first service)
-              service=$(yq '.services | keys | .[0]' $file)
-              image=$(yq ".services.${service}.image" $file)
+              # Extract version from image
+              service=$(yq '.services | keys | .[0]' "$file")
+              image=$(yq ".services.${service}.image" "$file")
 
               if [[ "$image" == *":"* ]]; then
                 new_version=$(cut -d ":" -f2- <<< "$image")
@@ -50,31 +52,37 @@ jobs:
                 trimmed_version=""
               fi
 
-              echo "app_name=$app_name" >> $GITHUB_OUTPUT
-              echo "old_version=$old_version" >> $GITHUB_OUTPUT
-              echo "new_version=$trimmed_version" >> $GITHUB_OUTPUT
-
-              .github/workflows/renovate-app-version.sh $app_name $old_version
+              changed_apps+=("${app_name}:${old_version}:${trimmed_version}")
+              .github/workflows/renovate-app-version.sh "$app_name" "$old_version"
             fi
           done
 
+          # 输出所有更改项，以逗号分隔传递
+          echo "apps=$(IFS=, ; echo "${changed_apps[*]}")" >> $GITHUB_OUTPUT
+
       - name: Commit & Push Changes
         run: |
-          app_name="${{ steps.rename.outputs.app_name }}"
-          old_version="${{ steps.rename.outputs.old_version }}"
-          new_version="${{ steps.rename.outputs.new_version }}"
+          set -e
+          IFS=',' read -r -a apps <<< "${{ steps.rename.outputs.apps }}"
+          for item in "${apps[@]}"; do
+            app_name=$(cut -d':' -f1 <<< "$item")
+            old_version=$(cut -d':' -f2 <<< "$item")
+            new_version=$(cut -d':' -f3 <<< "$item")
 
-          if [[ -n "$app_name" && -n "$new_version" ]]; then
-            git add "apps/$app_name/*"
-            git commit -m "📈将应用 $app_name 的版本从 $old_version 升级到 $new_version [skip ci]" --no-verify || echo "无内容可提交"
-            git push
-          fi
+            if [[ -n "$app_name" && -n "$new_version" ]]; then
+              git add "apps/$app_name/*"
+              git commit -m "📈将应用 $app_name 的版本从 $old_version 升级到 $new_version [skip ci]" --no-verify || echo "无内容可提交"
+            fi
+          done
+
+          git push || echo "无内容可推送"
 
       - name: Try auto-merge PR after version bump
         if: github.ref_name != 'main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -e
           branch_name=$(git rev-parse --abbrev-ref HEAD)
           echo "Current branch: $branch_name"
 
@@ -112,4 +120,4 @@ jobs:
             echo "PR is still not mergeable, skipping merge."
           fi
 
-
+          
