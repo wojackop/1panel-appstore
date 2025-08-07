@@ -26,11 +26,6 @@
   "packageRules": [
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["docker:dind"],
-      "enabled": false
-    },
-    {
-      "matchDatasources": ["docker"],
       "matchFileNames": [".github/**"],
       "enabled": false
     },

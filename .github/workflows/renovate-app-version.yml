@@ -43,7 +43,8 @@ jobs:
 
               # Extract version from image
               service=$(yq '.services | keys | .[0]' "$file")
-              image=$(yq ".services.${service}.image" "$file")
+              image=$(yq ".services.${service}.image" "$file" | grep -v '\[ignore\]' | cut -d'#' -f1 | xargs)
+
 
               if [[ "$image" == *":"* ]]; then
                 new_version=$(cut -d ":" -f2- <<< "$image")
