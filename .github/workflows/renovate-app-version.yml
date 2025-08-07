@@ -47,25 +47,31 @@ jobs:
               old_version=$(echo $file | cut -d'/' -f 3)
               echo "App name: $app_name, old version: $old_version"
 
-              # 找到第一个不带 [ignore] 标记的服务名
-              service=$(yq '.services | keys[]' "$file" | while read s; do
-                image_line=$(yq ".services.\"${s}\".image" "$file")
-                echo "Checking service '$s' with image: $image_line"
+              # 获取所有服务名
+              services=$(yq '.services | keys | .[]' "$file")
+              service=""
+              image_line=""
+
+              for s in $services; do
+                # 通过awk获取服务下的image行（包含注释）
+                image_line=$(awk "/services:/{flag=0} /^\s*$s:/{flag=1} flag && /^\s*image:/{print; exit}" "$file")
+                echo "Service $s image line: $image_line"
                 if [[ "$image_line" != *"[ignore]"* ]]; then
-                  echo "Selected service: $s"
-                  echo "$s"
+                  service="$s"
                   break
                 else
-                  echo "Ignoring service $s due to [ignore] tag"
+                  echo "Skipping service $s due to [ignore]"
                 fi
-              done)
+              done
 
               if [[ -z "$service" ]]; then
-                echo "No service without [ignore] found in $file, skipping..."
+                echo "No valid service found in $file, skipping..."
                 continue
               fi
 
-              image=$(yq ".services.\"${service}\".image" "$file" | cut -d'#' -f1 | xargs)
+              # 提取image纯字符串，去除注释和多余空格
+              image=$(echo "$image_line" | sed -E 's/^\s*image:\s*([^ #]+).*/\1/')
+              echo "Selected service: $service"
               echo "Extracted image: $image"
 
               if [[ "$image" == *":"* ]]; then
