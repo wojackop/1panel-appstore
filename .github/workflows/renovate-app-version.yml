@@ -36,29 +36,54 @@ jobs:
 
           files="${{ steps.updated-files.outputs.files }}"
           declare -a changed_apps=()
+
+          echo "Updated files: $files"
+
           for file in $files; do
             if [[ $file == *"docker-compose.yml"* ]]; then
+              echo "Processing file: $file"
+
               app_name=$(echo $file | cut -d'/' -f 2)
               old_version=$(echo $file | cut -d'/' -f 3)
+              echo "App name: $app_name, old version: $old_version"
 
-              # Extract version from image
-              service=$(yq '.services | keys | .[0]' "$file")
-              image=$(yq ".services.${service}.image" "$file" | grep -v '\[ignore\]' | cut -d'#' -f1 | xargs)
+              # 找到第一个不带 [ignore] 标记的服务名
+              service=$(yq '.services | keys[]' "$file" | while read s; do
+                image_line=$(yq ".services.\"${s}\".image" "$file")
+                echo "Checking service '$s' with image: $image_line"
+                if [[ "$image_line" != *"[ignore]"* ]]; then
+                  echo "Selected service: $s"
+                  echo "$s"
+                  break
+                else
+                  echo "Ignoring service $s due to [ignore] tag"
+                fi
+              done)
 
+              if [[ -z "$service" ]]; then
+                echo "No service without [ignore] found in $file, skipping..."
+                continue
+              fi
+
+              image=$(yq ".services.\"${service}\".image" "$file" | cut -d'#' -f1 | xargs)
+              echo "Extracted image: $image"
 
               if [[ "$image" == *":"* ]]; then
                 new_version=$(cut -d ":" -f2- <<< "$image")
-                trimmed_version=${new_version/#"v"}
+                trimmed_version=${new_version/#"v"/}
+                echo "Parsed new version: $trimmed_version"
               else
                 trimmed_version=""
+                echo "No version tag found in image."
               fi
 
               changed_apps+=("${app_name}:${old_version}:${trimmed_version}")
-              .github/workflows/renovate-app-version.sh "$app_name" "$old_version"
+              echo "Calling renovate-app-version.sh with: $app_name, $old_version, $trimmed_version"
+              .github/workflows/renovate-app-version.sh "$app_name" "$old_version" "$trimmed_version"
             fi
           done
 
-          # 输出所有更改项，以逗号分隔传递
+          echo "All changed apps: ${changed_apps[*]}"
           echo "apps=$(IFS=, ; echo "${changed_apps[*]}")" >> $GITHUB_OUTPUT
 
       - name: Commit & Push Changes
