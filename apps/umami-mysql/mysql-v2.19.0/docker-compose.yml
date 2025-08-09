@@ -1,6 +1,6 @@
 services:
   umami:
-    image: ghcr.nju.edu.cn/umami-software/umami:mysql-v2.19.0
+    image: ghcr.430070.xyz/umami-software/umami:mysql-v2.19.0
     container_name: ${CONTAINER_NAME}
     restart: always
     labels:

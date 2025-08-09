@@ -19,7 +19,7 @@
     {
       "hostType": "docker",
       "matchHost": "ghcr.430070.xyz",
-      "registryUrls": ["https://ghcr.nju.edu.cn"]
+      "registryUrls": ["https://ghcr.430070.xyz"]
     }
   ],
 
@@ -41,7 +41,7 @@
     },
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.nju.edu.cn/umami-software/umami"],
+      "matchPackageNames": ["ghcr.430070.xyz/umami-software/umami"],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
       "versioning": "semver"
     }
