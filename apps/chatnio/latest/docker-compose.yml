@@ -1,4 +1,3 @@
-version: '3'
 services:
   chatnio:
       image: programzmh/chatnio:latest # chatnio-cot:latest

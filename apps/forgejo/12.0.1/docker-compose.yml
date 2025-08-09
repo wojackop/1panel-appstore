@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   forgejo:
     image: codeberg.org/forgejo/forgejo:12.0.1

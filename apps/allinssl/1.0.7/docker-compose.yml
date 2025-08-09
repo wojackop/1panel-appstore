@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   allinssl:
     image: allinssl/allinssl:v1.0.7

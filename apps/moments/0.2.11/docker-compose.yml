@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   moments:
     image: kingwrcy/moments:0.2.11

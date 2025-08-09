@@ -19,16 +19,11 @@
     {
       "hostType": "docker",
       "matchHost": "ghcr.430070.xyz",
-      "registryUrls": ["https://ghcr.430070.xyz"]
+      "registryUrls": ["https://ghcr.nju.edu.cn"]
     }
   ],
 
   "packageRules": [
-    {
-      "matchDatasources": ["docker"],
-      "matchFileNames": [".github/**"],
-      "enabled": false
-    },
     {
       "matchDatasources": ["docker"],
       "matchFileNames": ["apps/meting-api/*/docker-compose.yml"],
@@ -46,7 +41,7 @@
     },
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.430070.xyz/umami-software/umami"],
+      "matchPackageNames": ["ghcr.nju.edu.cn/umami-software/umami"],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
       "versioning": "semver"
     }
