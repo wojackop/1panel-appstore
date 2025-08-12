@@ -15,11 +15,6 @@
       "hostType": "docker",
       "matchHost": "code.forgejo.org",
       "registryUrls": ["https://code.forgejo.org"]
-    },
-    {
-      "hostType": "docker",
-      "matchHost": "ghcr.430070.xyz",
-      "registryUrls": ["https://ghcr.430070.xyz"]
     }
   ],
 
@@ -45,7 +40,7 @@
     },
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.430070.xyz/umami-software/umami"],
+      "matchPackageNames": ["ghcr.io/umami-software/umami"],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
       "versioning": "semver"
     }

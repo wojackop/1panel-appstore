@@ -1,15 +1,5 @@
 #!/bin/bash
 
-if [[ -f ./.env ]]; then
-  if grep -q "PANEL_DB_TYPE" ./.env; then
-    echo "PANEL_DB_TYPE 已存在"
-  else
-    echo 'PANEL_DB_TYPE="mysql"' >> ./.env
-  fi
-else
-  echo ".env 文件不存在"
-fi
-
 # 替换docker-compose.yml中的ghcr.io为ghcr.nju.edu.cn
 echo "开始替换镜像源地址..."
 if sed -i 's/ghcr.io/ghcr.nju.edu.cn/g' ./docker-compose.yml; then
