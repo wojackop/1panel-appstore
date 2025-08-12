@@ -25,6 +25,10 @@
 
   "packageRules": [
     {
+      "matchManagers": ["github-actions"],
+      "enabled": false
+    },
+    {
       "matchDatasources": ["docker"],
       "matchFileNames": ["apps/meting-api/*/docker-compose.yml"],
       "enabled": false
