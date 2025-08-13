@@ -40,6 +40,11 @@
     },
     {
       "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/fish2018/pansou-web"],
+      "versioning": "loose"
+    },
+    {
+      "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/umami-software/umami"],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
       "versioning": "semver"
