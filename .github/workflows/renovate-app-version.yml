@@ -109,7 +109,7 @@ jobs:
 
           git push || echo "无内容可推送"
 
-      - name: Try auto-merge PR after version bump
+      - name: Auto rebase & merge PR
         if: github.ref_name != 'main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -118,10 +118,29 @@ jobs:
           branch_name=$(git rev-parse --abbrev-ref HEAD)
           echo "Current branch: $branch_name"
 
-          # 合并主分支以避免 not mergeable
           git fetch origin main
-          git merge origin/main --no-edit || git rebase origin/main
-          git push origin "$branch_name"
+
+          # 循环重试 rebase + 推送（最多 5 次）
+          for i in {1..5}; do
+            echo "Rebase attempt #$i"
+            if git rebase origin/main; then
+              if git push origin "$branch_name" --force-with-lease; then
+                echo "Rebase & push successful."
+                break
+              else
+                echo "Push failed, retrying..."
+              fi
+            else
+              echo "Rebase failed, aborting..."
+              git rebase --abort || true
+            fi
+            if [ "$i" -eq 5 ]; then
+              echo "Rebase or push failed after 5 attempts, exiting."
+              exit 1
+            fi
+            sleep 3
+            git fetch origin main
+          done
 
           # 获取 PR 编号
           pr_number=$(gh pr list --state open --head "$branch_name" --json number -q '.[0].number')
@@ -130,26 +149,20 @@ jobs:
             exit 0
           fi
 
-          echo "Found PR #$pr_number, checking mergeability..."
-
-          # 等待 PR 可合并状态（最多重试 10 次）
-          for i in {1..10}; do
-            is_mergeable=$(gh pr view "$pr_number" --json mergeable -q '.mergeable')
-            echo "Mergeable status: $is_mergeable"
-            if [ "$is_mergeable" == "MERGEABLE" ]; then
+          echo "Merging PR #$pr_number..."
+          # 循环重试合并（最多 5 次，处理 UNKNOWN/CONFLICTING 状态）
+          for i in {1..5}; do
+            if gh pr merge "$pr_number" --rebase --delete-branch --admin --body "Auto-merged after version bump"; then
+              echo "PR #$pr_number merged successfully."
               break
+            else
+              echo "Merge attempt #$i failed, retrying..."
             fi
-            echo "PR not mergeable yet, retrying in 5s... ($i/10)"
+            if [ "$i" -eq 5 ]; then
+              echo "Failed to merge PR after 5 attempts."
+              exit 1
+            fi
             sleep 5
           done
-
-          # 再次检查并尝试合并
-          is_mergeable=$(gh pr view "$pr_number" --json mergeable -q '.mergeable')
-          if [ "$is_mergeable" == "MERGEABLE" ]; then
-            echo "PR is mergeable now, merging..."
-            gh pr merge "$pr_number" --merge --delete-branch --admin
-          else
-            echo "PR is still not mergeable, skipping merge."
-          fi
 
           
