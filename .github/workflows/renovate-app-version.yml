@@ -128,7 +128,7 @@ jobs:
           echo "Found PR #$pr_number, force merging..."
 
           # 强制合并，不管 mergeable 状态
-          gh pr merge "$pr_number" --merge --delete-branch --admin --force
+          gh pr merge "$pr_number" --merge --delete-branch --admin
 
 
                 
