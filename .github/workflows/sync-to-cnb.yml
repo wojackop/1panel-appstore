@@ -1,14 +1,8 @@
 name: Sync commits to CNB (force)
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
+  schedule:
+    - cron: "0 */6 * * *"   # 每 6 小时执行一次
   workflow_dispatch:
     inputs:
       reason:
@@ -18,7 +12,6 @@ on:
 
 jobs:
   sync:
-    if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -26,8 +19,23 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: main
+          fetch-depth: 0
+
+      - name: Check if there are commits in the last 6 hours
+        id: check
+        run: |
+          NEW_COMMITS=$(git log --since="6 hours ago" --oneline)
+          if [ -z "$NEW_COMMITS" ]; then
+            echo "No new commits in the last 6 hours, skip sync."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "New commits found:"
+            echo "$NEW_COMMITS"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Add CNB remote and force push
+        if: steps.check.outputs.skip == 'false'
         env:
           CNB_USERNAME: ${{ secrets.CNB_USERNAME }}
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
@@ -37,7 +45,7 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add .
-          git commit -m "${{ github.event.head_commit.message }}==>[$(date +"%Y-%m-%d %H:%M:%S")]"
+          git commit -m "Sync commit ==> [$(date +"%Y-%m-%d %H:%M:%S")]"
           git branch -M main
           git remote add origin "https://${{ secrets.CNB_USERNAME }}:${{ secrets.CNB_TOKEN }}@cnb.cool/liiiu/appstore.git"
           git push --force --quiet origin main
