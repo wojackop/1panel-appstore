@@ -39,38 +39,40 @@
 
 ```bash
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
-set -e
-
-# 配置路径
 GIT_REPO="https://cnb.cool/Liiiu/appstore"
 TMP_DIR="/opt/1panel/resource/apps/local/appstore-localApps"
 LOCAL_APPS_DIR="/opt/1panel/resource/apps/local"
 
+trap 'rm -rf "$TMP_DIR"' EXIT
+
 echo "📥 Cloning appstore repo..."
+[ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
 git clone "$GIT_REPO" "$TMP_DIR"
 
 echo "🔄 Mirroring apps..."
-cd appstore
-chmod +x ./mirror.sh
-./mirror.sh
-cd ..
+cd "$TMP_DIR"
+if [[ -f ./mirror.sh ]]; then
+    chmod +x ./mirror.sh
+    ./mirror.sh
+else
+    echo "⚠️ mirror.sh not found, skipping mirroring"
+fi
+cd -
 
 mkdir -p "$LOCAL_APPS_DIR"
 
 for app_path in "$TMP_DIR/apps/"*; do
-  [ -d "$app_path" ] || continue
+    [ -d "$app_path" ] || continue
+    app_name=$(basename "$app_path")
+    local_app_path="$LOCAL_APPS_DIR/$app_name"
 
-  app_name=$(basename "$app_path")
-  local_app_path="$LOCAL_APPS_DIR/$app_name"
-
-  echo "🔁 Updating app: $app_name"
-  [ -d "$local_app_path" ] && rm -rf "$local_app_path"
-  cp -r "$app_path" "$local_app_path"
+    echo "🔁 Updating app: $app_name"
+    [ -d "$local_app_path" ] && rm -rf "$local_app_path"
+    cp -r "$app_path" "$local_app_path"
 done
-
-echo "🧼 Cleaning up temporary repo..."
-rm -rf "$TMP_DIR"
 
 echo "✅ Sync completed."
 ```
@@ -99,35 +101,35 @@ GIT_REPO="https://github.com/willow-god/appstore"
 /opt/mirror-config.env
 ```
 
-如果需要配置对应镜像，请自行创建以上文件。
+如果需要配置对应镜像，请自行创建以上文件，然后写入以下内容。
 
 ### 2️⃣ 配置文本
 
 ```ini
 # ====== GHCR (GitHub Container Registry) ======
 # 是否经常被墙：是
-GHCR_ENABLE=false
-GHCR_MIRROR=ghcr.io
+GHCR_ENABLE=true
+GHCR_MIRROR=ghcr.io.mirror
 
 # ====== Quay.io (RedHat/Community images) ======
 # 是否经常被墙：是
 QUAY_ENABLE=false
-QUAY_MIRROR=quay.io
+QUAY_MIRROR=quay.io.mirror
 
 # ====== GCR (Google Container Registry) ======
 # 是否经常被墙：是
 GCR_ENABLE=false
-GCR_MIRROR=gcr.io
+GCR_MIRROR=gcr.io.mirror
 
 # ====== k8s.gcr.io (旧 Kubernetes 镜像仓库) ======
 # 是否经常被墙：是
 K8S_GCR_ENABLE=false
-K8S_GCR_MIRROR=k8s.gcr.io
+K8S_GCR_MIRROR=k8s.gcr.io.mirror
 
 # ====== registry.k8s.io (新 Kubernetes 镜像仓库) ======
 # 是否经常被墙：是
 K8S_REG_ENABLE=false
-K8S_REG_MIRROR=registry.k8s.io
+K8S_REG_MIRROR=registry.k8s.io.mirror
 ```
 
 > 💡 **说明**：
