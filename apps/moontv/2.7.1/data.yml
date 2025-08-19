@@ -50,7 +50,7 @@ additionalProperties:
       random: true
       type: password
 
-    - default: false
+    - default: 启用
       envKey: MOONTV_ENABLE_REGISTER
       required: true
       type: select
