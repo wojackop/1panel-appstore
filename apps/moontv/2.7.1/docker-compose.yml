@@ -4,7 +4,7 @@ services:
     container_name: ${CONTAINER_NAME}-kvrocks
     restart: unless-stopped
     volumes:
-      - ./data:/var/lib/kvrocks
+      - ./data/kvrocks:/var/lib/kvrocks
     networks:
       - 1panel-network
     labels:
