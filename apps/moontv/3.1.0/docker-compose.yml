@@ -1,35 +1,30 @@
 services:
-  moontv-kvrocks:
-    image: apache/kvrocks # [ignore]
-    container_name: ${CONTAINER_NAME}-kvrocks
-    restart: unless-stopped
-    volumes:
-      - ./data:/var/lib/kvrocks
-    networks:
-      - 1panel-network
-    labels:
-      createdBy: "Apps"
-
   moontv:
     image: ghcr.io/moontechlab/lunatv:3.1.0
     container_name: ${CONTAINER_NAME}
-    restart: unless-stopped
+    restart: always
+
     labels:
       createdBy: "Apps"
     ports:
       - ${PANEL_APP_PORT_HTTP}:3000
+
     environment:
       USERNAME: ${MOONTV_ADMIN_USER}
       PASSWORD: ${MOONTV_ADMIN_PASSWORD}
-      NEXT_PUBLIC_STORAGE_TYPE: kvrocks
-      KVROCKS_URL: redis://moontv-kvrocks:6666
+
+      NEXT_PUBLIC_STORAGE_TYPE: ${MOONTV_STORAGE_TYPE}
+      KVROCKS_URL: ${KVROCKS_CONNECT_URL}
+      REDIS_URL: ${REDIS_CONNECT_URL}
+
       NEXT_PUBLIC_ENABLE_REGISTER: ${MOONTV_ENABLE_REGISTER}
       NEXT_PUBLIC_SITE_NAME: ${MOONTV_SITE_NAME}
       ANNOUNCEMENT: ${MOONTV_ANNOUNCEMENT}
+
+      AUTH_TOKEN: ${MOONTV_AUTH_TOKEN}
+      
     networks:
       - 1panel-network
-    depends_on:
-      - moontv-kvrocks
 
 networks:
   1panel-network:

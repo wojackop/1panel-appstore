@@ -1,0 +1,19 @@
+services:
+  moontv-kvrocks:
+    image: apache/kvrocks:2.13.0
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    ports:
+      - ${PANEL_APP_PORT_HTTP}:6666
+    environment:
+      - KVROCKS_PASSWORD=${KVROCKS_PASSWORD}   # 设置连接密码
+    volumes:
+      - ./data:/var/lib/kvrocks
+    networks:
+      - 1panel-network
+    labels:
+      createdBy: "Apps"
+
+networks:
+  1panel-network:
+    external: true

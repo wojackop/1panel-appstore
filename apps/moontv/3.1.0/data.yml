@@ -1,5 +1,6 @@
 additionalProperties:
   formFields:
+    # HTTP 端口
     - default: 32094
       envKey: PANEL_APP_PORT_HTTP
       labelEn: HTTP Port
@@ -17,6 +18,7 @@ additionalProperties:
       rule: paramPort
       type: number
 
+    # 管理员账号
     - default: admin
       envKey: MOONTV_ADMIN_USER
       labelEn: Admin Username
@@ -33,6 +35,7 @@ additionalProperties:
       required: true
       type: text
 
+    # 管理员密码
     - default: "password"
       envKey: MOONTV_ADMIN_PASSWORD
       labelEn: Admin Password
@@ -50,6 +53,7 @@ additionalProperties:
       random: true
       type: password
 
+    # 是否开启注册
     - default: 启用
       envKey: MOONTV_ENABLE_REGISTER
       required: true
@@ -69,6 +73,7 @@ additionalProperties:
         - label: 禁用
           value: "false"
 
+    # 站点名称
     - default: MoonTV
       envKey: MOONTV_SITE_NAME
       labelEn: Site Name
@@ -85,6 +90,7 @@ additionalProperties:
       required: false
       type: text
 
+    # 站点公告
     - default: 本网站仅提供影视信息搜索服务，所有内容均来自第三方网站。本站不存储任何视频资源，不对任何内容的准确性、合法性、完整性负责。
       envKey: MOONTV_ANNOUNCEMENT
       labelEn: Announcement
@@ -99,4 +105,83 @@ additionalProperties:
         zh: 站点公告
         zh-Hant: 網站公告
       required: false
+      type: text
+
+    # 存储类型选择
+    - default: kvrocks
+      envKey: MOONTV_STORAGE_TYPE
+      labelEn: Storage Type
+      labelZh: 存储类型
+      label:
+        en: Storage Type
+        ja: ストレージタイプ
+        ms: Jenis Stor
+        pt-br: Tipo de Armazenamento
+        ru: Тип хранилища
+        ko: 저장소 유형
+        zh: 存储类型
+        zh-Hant: 儲存類型
+      required: true
+      type: select
+      values:
+        - label: kvrocks
+          value: kvrocks
+        - label: redis
+          value: redis
+
+    # Kvrocks URL（可选）
+    - default: ""
+      envKey: KVROCKS_CONNECT_URL
+      labelEn: Kvrocks URL
+      labelZh: Kvrocks 连接 URL
+      label:
+        en: Kvrocks URL
+        ja: Kvrocks 接続 URL
+        ms: Kvrocks URL Sambungan
+        pt-br: URL Kvrocks
+        ru: URL подключения Kvrocks
+        ko: Kvrocks URL
+        zh: Kvrocks 连接 URL
+        zh-Hant: Kvrocks 連接 URL
+      required: false
+      type: text
+      dependsOn:
+        envKey: MOONTV_STORAGE_TYPE
+        value: kvrocks
+
+    # Redis URL（可选）
+    - default: ""
+      envKey: REDIS_CONNECT_URL
+      labelEn: Redis URL
+      labelZh: Redis 连接 URL
+      label:
+        en: Redis URL
+        ja: Redis 接続 URL
+        ms: Redis URL Sambungan
+        pt-br: URL Redis
+        ru: URL подключения Redis
+        ko: Redis URL
+        zh: Redis 连接 URL
+        zh-Hant: Redis 連接 URL
+      required: false
+      type: text
+      dependsOn:
+        envKey: MOONTV_STORAGE_TYPE
+        value: redis
+
+    # 授权码
+    - default: ""
+      envKey: MOONTV_AUTH_TOKEN
+      labelEn: Auth Token
+      labelZh: 授权码
+      label:
+        en: Auth Token
+        ja: 認証トークン
+        ms: Token Kebenaran
+        pt-br: Token de Autorização
+        ru: Токен авторизации
+        ko: 인증 토큰
+        zh: 授权码
+        zh-Hant: 授權碼
+      required: true
       type: text
