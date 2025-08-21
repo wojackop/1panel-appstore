@@ -1,7 +1,7 @@
 additionalProperties:
   formFields:
     - default: kvrocks
-      envKey: KVROCKS_PASSWORD
+      envKey: PANEL_KVROCKS_ROOT_PASSWORD
       labelEn: Database Password
       labelZh: 数据库密码
       label:
