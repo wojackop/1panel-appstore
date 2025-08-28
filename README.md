@@ -1,6 +1,8 @@
-# 🌈 清羽飞扬 · 1Panel 第三方 App Store
+# 🌈 1Panel 第三方 App Store
 
-这是一个由 **清羽飞扬** 自建维护的 **1Panel 第三方应用商店仓库**，用于收纳个人常用的容器化应用与预设配置，基于 [1Panel](https://github.com/1Panel-dev/1Panel) 的 App Store 架构。
+本仓库是 [清羽飞扬](https://github.com/Liiiu/appstore) 维护的 **1Panel 第三方应用商店** 的镜像分支，基于 [1Panel](https://github.com/1Panel-dev/1Panel) 应用市场架构构建。
+
+收录常用容器化应用，旨在补充官方应用商店，满足个性化部署与实验性环境的需求。并同步至 [cnb.cool](https://cnb.cool/gyhwd.top/1panel-appstore) 以提供更稳定的国内访问支持。
 
 > 本项目旨在补充官方 App Store，适用于特定需求场景或实验性环境。
 
@@ -21,9 +23,11 @@
 
 你可以将本仓库作为第三方 App Store 添加至 1Panel，即可在 Web 面板中浏览、安装、管理其中的应用。
 
-### 添加第三方应用仓库
+### 🧩 想添加自己的应用？
 
-参考官方文档：[📚 如何添加第三方应用仓库](https://github.com/1Panel-dev/1Panel/wiki)
+欢迎参考官方教程，构建你自己的 App Store 仓库：
+
+👉 [📘 官方指南：如何提交自己想要的应用](https://github.com/1Panel-dev/appstore/wiki/如何提交自己想要的应用)
 
 ---
 
@@ -31,46 +35,123 @@
 
 以下是自动同步 App 应用至 1Panel 的脚本，适用于开发或部署用户。
 
-### 📥 国内同步脚本：
-
-镜像仓库地址：https://cnb.cool/Liiiu/appstore
-
 使用github action保持同步更新。
+
+### 📦 普通脚本（仅同步应用）：
 
 ```bash
 #!/bin/bash
+# 清羽飞扬 · 1Panel 第三方应用商店同步脚本（轻量优化版）
+# 仅同步应用，不执行镜像替换
+
+# 启用严格模式：遇到错误、未定义变量、管道错误时立即退出
 set -euo pipefail
+
+# 设置字段分隔符，防止文件名含空格或换行符时出错
 IFS=$'\n\t'
 
-GIT_REPO="https://cnb.cool/Liiiu/appstore"
+# 配置路径
+GIT_REPO="https://cnb.cool/gyhwd.top/1panel-appstore"  # 第三方应用商店地址
 TMP_DIR="/opt/1panel/resource/apps/local/appstore-localApps"
 LOCAL_APPS_DIR="/opt/1panel/resource/apps/local"
 
-trap 'rm -rf "$TMP_DIR"' EXIT
+# 确保脚本退出时自动清理临时目录（即使中途出错也会执行）
+# trap 'rm -rf "$TMP_DIR"' EXIT
+trap 'echo "🧹 清理临时目录: $TMP_DIR"; rm -rf "$TMP_DIR"' EXIT
 
+# 开始克隆应用商店仓库
 echo "📥 Cloning appstore repo..."
-[ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
 git clone "$GIT_REPO" "$TMP_DIR"
 
-echo "🔄 Mirroring apps..."
-cd "$TMP_DIR"
-if [[ -f ./mirror.sh ]]; then
-    chmod +x ./mirror.sh
-    ./mirror.sh
-else
-    echo "⚠️ mirror.sh not found, skipping mirroring"
-fi
-cd -
-
+# 创建本地应用目录（如果不存在）
 mkdir -p "$LOCAL_APPS_DIR"
 
+# 遍历所有应用并同步到本地
 for app_path in "$TMP_DIR/apps/"*; do
+    # 跳过非目录项
     [ -d "$app_path" ] || continue
+
     app_name=$(basename "$app_path")
     local_app_path="$LOCAL_APPS_DIR/$app_name"
 
     echo "🔁 Updating app: $app_name"
+    # 如果本地已存在同名应用，先删除
     [ -d "$local_app_path" ] && rm -rf "$local_app_path"
+    # 复制新版本应用
+    cp -r "$app_path" "$local_app_path"
+done
+
+# 清理临时克隆的仓库目录
+echo "🧼 Cleaning up temporary repo..."
+# 注意：rm -rf "$TMP_DIR" 会被 trap 自动执行，此处可省略或保留（重复执行无影响）
+
+echo "✅ Sync completed."
+```
+
+### 🔄 `mirror.sh` 版本脚本（支持镜像替换）：
+
+```bash
+#!/bin/bash
+# 清羽飞扬 · 1Panel 第三方应用商店同步脚本（优化版）
+# 支持同步应用并执行镜像替换（通过 mirror.sh）
+
+# 启用严格模式：遇到错误、未定义变量、管道错误时立即退出
+set -euo pipefail
+
+# 设置字段分隔符，防止文件名含空格或换行符时出错
+IFS=$'\n\t'
+
+# 配置路径
+GIT_REPO="https://cnb.cool/gyhwd.top/1panel-appstore"  # 第三方应用商店地址
+TMP_DIR="/opt/1panel/resource/apps/local/appstore-localApps"
+LOCAL_APPS_DIR="/opt/1panel/resource/apps/local"
+
+# 确保脚本退出时自动清理临时目录（即使中途出错也会执行）
+trap 'echo "🧹 清理临时目录: $TMP_DIR"; rm -rf "$TMP_DIR"' EXIT
+
+# 开始克隆应用商店仓库
+echo "📥 Cloning appstore repo..."
+# 如果临时目录已存在，先删除（避免 git clone 失败）
+[ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
+git clone "$GIT_REPO" "$TMP_DIR"
+
+# 进入克隆的仓库目录，准备执行镜像替换
+cd "$TMP_DIR"
+
+# 执行镜像替换脚本（如果存在）
+echo "🔄 Mirroring apps..."
+if [[ -f "./mirror.sh" ]]; then
+    echo "🔧 mirror.sh found, starting image mirroring process..."
+    chmod +x ./mirror.sh
+    set +u # 临时关闭未定义变量检查，避免 mirror.sh 内部变量问题
+	if ! ./mirror.sh; then
+        echo "⚠️ Warning: mirror.sh exited with error, but continuing sync..."
+    fi
+    set -u # 重新开启
+    echo "✅ Image mirroring completed."
+else
+    echo "⚠️ mirror.sh not found, skipping mirroring"
+fi
+
+# 返回原始目录
+cd -
+
+# 创建本地应用目录（如果不存在）
+mkdir -p "$LOCAL_APPS_DIR"
+
+# 遍历所有应用并同步到本地
+echo "🔁 Syncing apps to local directory..."
+for app_path in "$TMP_DIR/apps/"*; do
+    # 跳过非目录项
+    [ -d "$app_path" ] || continue
+
+    app_name=$(basename "$app_path")
+    local_app_path="$LOCAL_APPS_DIR/$app_name"
+
+    echo "🔁 Updating app: $app_name"
+    # 如果本地已存在同名应用，先删除
+    [ -d "$local_app_path" ] && rm -rf "$local_app_path"
+    # 复制新版本应用
     cp -r "$app_path" "$local_app_path"
 done
 
@@ -80,7 +161,7 @@ echo "✅ Sync completed."
 🌍 国外环境请替换为 GitHub 仓库：
 
 ```bash
-GIT_REPO="https://github.com/willow-god/appstore"
+GIT_REPO="https://github.com/wojackop/1panel-appstore"
 ```
 
 ------
@@ -142,34 +223,8 @@ K8S_REG_MIRROR=registry.k8s.io.mirror
 
 > 该部分无需配置，仅供说明脚本的绿色性质，替换脚本开源于非docker.io镜像中如**MoonTV**仓库，有需要请自行查看
 
-在克隆仓库后，按照本仓库的脚本，会在应用目录下执行 `mirror.sh`进行镜像源替换。
+在克隆仓库后，按照本仓库的脚本，会在应用目录下执行 `mirror.sh` 进行镜像源替换。
 
 这样即使镜像源被墙，也能快速替换为你配置的加速地址。
 
 > **目前还在测试中**：由于目前还在测试中，所以可能会出现一些问题。如果出现问题，请及时反馈。
-
----
-
-## 📮 问题反馈
-
-如发现配置错误或希望新增应用，欢迎在 Issues 区提交反馈：
-
-- 🛠 [本仓库 Issues](https://github.com/willow-god/appstore/issues)
-
-> ⚠️ 本项目仅对仓库中提供的应用内容提供支持。1Panel 本体问题请前往 [1Panel 主项目](https://github.com/1Panel-dev/1Panel/issues) 提问。
-
-------
-
-## ✨ 项目作者
-
-- 💻 清羽飞扬（willow-god）
-- 🌐 [个人主页](https://www.liushen.fun/)
-- 📘 [技术博客](https://blog.liushen.fun/)
-
-------
-
-## 🧩 想添加自己的应用？
-
-欢迎参考官方教程，构建你自己的 App Store 仓库：
-
-👉 [📘 官方指南：如何提交自己想要的应用](https://github.com/1Panel-dev/appstore/wiki/如何提交自己想要的应用)
