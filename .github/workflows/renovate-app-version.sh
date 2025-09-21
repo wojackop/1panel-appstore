@@ -34,4 +34,3 @@ trimmed_version=${new_version/#"v"}
 
 echo "Renaming apps/$app_name/$old_version to apps/$app_name/$trimmed_version"
 mv "apps/$app_name/$old_version" "apps/$app_name/$trimmed_version"
-
