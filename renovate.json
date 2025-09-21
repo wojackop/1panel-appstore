@@ -1,23 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "gitIgnoredAuthors": ["githubaction@githubaction.com"],
   "rebaseWhen": "never",
   "prCreation": "immediate",
-
   "hostRules": [
     {
       "hostType": "docker",
       "matchHost": "codeberg.org",
-      "registryUrls": ["https://codeberg.org"]
+      "registryUrls": [
+        "https://codeberg.org"
+      ]
     },
     {
       "hostType": "docker",
       "matchHost": "code.forgejo.org",
-      "registryUrls": ["https://code.forgejo.org"]
+      "registryUrls": [
+        "https://code.forgejo.org"
+      ]
     }
   ],
-
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
@@ -25,17 +27,23 @@
     },
     {
       "matchDatasources": ["docker"],
-      "matchFileNames": ["apps/meting-api/*/docker-compose.yml"],
+      "matchFileNames": [
+        "apps/meting-api/*/docker-compose.yml"
+      ],
       "enabled": false
     },
     {
       "matchDatasources": ["docker"],
-      "matchFileNames": ["apps/chatnio/*/docker-compose.yml"],
+      "matchFileNames": [
+        "apps/chatnio/*/docker-compose.yml"
+      ],
       "enabled": false
     },
     {
       "matchDatasources": ["docker"],
-      "matchFileNames": ["apps/*/*/docker-compose.yml"],
+      "matchFileNames": [
+        "apps/*/*/docker-compose.yml"
+      ],
       "versioning": "semver"
     },
     {
