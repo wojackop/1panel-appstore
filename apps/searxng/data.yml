@@ -1,0 +1,32 @@
+name: SearXNG
+tags:
+  - 搜索引擎
+title: 隐私保护的开源元搜索引擎
+description: 🔍 SearXNG 是一个免费的互联网元搜索引擎，聚合来自多个搜索服务的结果，不存储用户搜索信息，保护用户隐私。
+additionalProperties:
+  key: searxng
+  name: SearXNG
+  tags:
+    - WebSite
+    - Tool
+  shortDescZh: 隐私保护的开源元搜索引擎
+  shortDescEn: Privacy-respecting open source metasearch engine
+  type: website
+  crossVersionUpdate: true
+  limit: 0
+  recommend: 0
+  website: https://searxng.org/
+  github: https://github.com/searxng/searxng
+  document: https://docs.searxng.org/
+  description:
+    en: 🔍 SearXNG is a free internet metasearch engine which aggregates results from various search services and databases. Users are neither tracked nor profiled. Additionally, SearXNG can be used over Tor for online anonymity.
+    zh: 🔍 SearXNG 是一个免费的互联网元搜索引擎，聚合来自各种搜索服务和数据库的结果。不会跟踪或分析用户。此外，SearXNG 可以通过 Tor 使用以实现在线匿名。
+    zh-Hant: 🔍 SearXNG 是一個免費的網際網路元搜尋引擎，聚合來自各種搜尋服務和資料庫的結果。不會追蹤或分析使用者。此外，SearXNG 可以透過 Tor 使用以實現線上匿名。
+    ja: 🔍 SearXNG は、さまざまな検索サービスやデータベースからの結果を集約する無料のインターネットメタ検索エンジンです。ユーザーは追跡もプロファイリングもされません。さらに、SearXNG は Tor 経由でオンライン匿名性のために使用できます。
+    ms: 🔍 SearXNG ialah enjin pencarian meta internet percuma yang mengagregat hasil daripada pelbagai perkhidmatan carian dan pangkalan data. Pengguna tidak dijejaki mahupun diprofilkan. Selain itu, SearXNG boleh digunakan melalui Tor untuk kerahsiaan dalam talian.
+    pt-br: 🔍 SearXNG é um mecanismo de metabusca gratuito da internet que agrega resultados de vários serviços de busca e bancos de dados. Os usuários não são rastreados nem perfilados. Além disso, SearXNG pode ser usado através do Tor para anonimato online.
+    ru: 🔍 SearXNG — это бесплатная интернет-метапоисковая система, которая агрегирует результаты из различных поисковых сервисов и баз данных. Пользователи не отслеживаются и не профилируются. Кроме того, SearXNG можно использовать через Tor для онлайн-анонимности.
+    ko: 🔍 SearXNG는 다양한 검색 서비스와 데이터베이스의 결과를 집계하는 무료 인터넷 메타 검색 엔진입니다. 사용자는 추적되거나 프로파일링되지 않습니다. 또한 SearXNG는 온라인 익명성을 위해 Tor를 통해 사용할 수 있습니다.
+  architectures:
+    - amd64
+    - arm64
