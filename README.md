@@ -2,9 +2,7 @@
 
 本仓库是 [清羽飞扬](https://github.com/Liiiu/appstore) 维护的 **1Panel 第三方应用商店** 的镜像分支，基于 [1Panel](https://github.com/1Panel-dev/1Panel) 应用市场架构构建。
 
-收录常用容器化应用，旨在补充官方应用商店，满足个性化部署与实验性环境的需求。并同步至 [cnb.cool](https://cnb.cool/gyhwd.top/1panel-appstore) 以提供更稳定的国内访问支持。
-
-> 本项目旨在补充官方 App Store，适用于特定需求场景或实验性环境。
+收录常用容器化应用，旨在补充官方应用商店，满足个性化部署与实验性环境的需求，并同步至 [cnb.cool](https://cnb.cool/gyhwd.top/1panel-appstore) 以提供更稳定的国内访问支持。
 
 ---
 
@@ -23,7 +21,7 @@
 
 你可以将本仓库作为第三方 App Store 添加至 1Panel，即可在 Web 面板中浏览、安装、管理其中的应用。
 
-### 🧩 想添加自己的应用？
+### 🧩 添加第三方应用仓库？
 
 欢迎参考官方教程，构建你自己的 App Store 仓库：
 
@@ -35,7 +33,49 @@
 
 以下是自动同步 App 应用至 1Panel 的脚本，适用于开发或部署用户。
 
-使用github action保持同步更新。
+使用 github action 保持同步更新。
+
+### 📥 原始脚本
+
+```bash
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+GIT_REPO="https://cnb.cool/Liiiu/appstore"
+TMP_DIR="/opt/1panel/resource/apps/local/appstore-localApps"
+LOCAL_APPS_DIR="/opt/1panel/resource/apps/local"
+
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+echo "📥 Cloning appstore repo..."
+[ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
+git clone "$GIT_REPO" "$TMP_DIR"
+
+echo "🔄 Mirroring apps..."
+cd "$TMP_DIR"
+if [[ -f ./mirror.sh ]]; then
+    chmod +x ./mirror.sh
+    ./mirror.sh
+else
+    echo "⚠️ mirror.sh not found, skipping mirroring"
+fi
+cd -
+
+mkdir -p "$LOCAL_APPS_DIR"
+
+for app_path in "$TMP_DIR/apps/"*; do
+    [ -d "$app_path" ] || continue
+    app_name=$(basename "$app_path")
+    local_app_path="$LOCAL_APPS_DIR/$app_name"
+
+    echo "🔁 Updating app: $app_name"
+    [ -d "$local_app_path" ] && rm -rf "$local_app_path"
+    cp -r "$app_path" "$local_app_path"
+done
+
+echo "✅ Sync completed."
+```
 
 ### 📦 普通脚本（仅同步应用）：
 
@@ -158,6 +198,8 @@ done
 echo "✅ Sync completed."
 ```
 
+
+
 🌍 国外环境请替换为 GitHub 仓库：
 
 ```bash
@@ -165,6 +207,63 @@ GIT_REPO="https://github.com/wojackop/1panel-appstore"
 ```
 
 ------
+
+## 😎 单应用同步
+
+如果你想同步部分应用，可以采用以下脚本：
+
+```bash
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+# ========= 配置：要安装的应用列表 =========
+APPS_TO_INSTALL=(
+    "whoami"
+    "ech0"
+    "moments"
+)
+
+# ========= 常量 =========
+GIT_REPO="https://cnb.cool/Liiiu/appstore"
+TMP_DIR="/opt/1panel/resource/apps/local/appstore-localApps"
+LOCAL_APPS_DIR="/opt/1panel/resource/apps/local"
+
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+echo "📥 Cloning appstore repo..."
+[ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
+git clone "$GIT_REPO" "$TMP_DIR"
+
+echo "🔄 Running mirror.sh (if exists)..."
+cd "$TMP_DIR"
+if [[ -f ./mirror.sh ]]; then
+    chmod +x ./mirror.sh
+    ./mirror.sh || echo "⚠️ mirror.sh 执行失败，继续..."
+else
+    echo "⚠️ mirror.sh not found, skipping mirroring"
+fi
+cd - >/dev/null
+
+mkdir -p "$LOCAL_APPS_DIR"
+
+# ========= 遍历安装列表 =========
+for app_name in "${APPS_TO_INSTALL[@]}"; do
+    app_path="$TMP_DIR/apps/$app_name"
+    local_app_path="$LOCAL_APPS_DIR/$app_name"
+
+    if [[ ! -d "$app_path" ]]; then
+        echo "❌ 应用 $app_name 不存在于仓库，跳过"
+        continue
+    fi
+
+    echo "🔁 Updating app: $app_name"
+    [ -d "$local_app_path" ] && rm -rf "$local_app_path"
+    cp -r "$app_path" "$local_app_path"
+done
+
+echo "✅ Selected apps sync completed."
+```
 
 ## 🎡 镜像加速配置
 
@@ -186,7 +285,7 @@ GIT_REPO="https://github.com/wojackop/1panel-appstore"
 
 ### 2️⃣ 配置文本
 
-```ini
+```env
 # ====== GHCR (GitHub Container Registry) ======
 # 是否经常被墙：是
 GHCR_ENABLE=true
@@ -221,7 +320,7 @@ K8S_REG_MIRROR=registry.k8s.io.mirror
 
 ### 3️⃣ 自动替换逻辑
 
-> 该部分无需配置，仅供说明脚本的绿色性质，替换脚本开源于非docker.io镜像中如**MoonTV**仓库，有需要请自行查看
+> 该部分无需配置，仅供说明脚本的绿色性质，替换脚本开源于非docker.io镜像中如 **MoonTV** 仓库，有需要请自行查看
 
 在克隆仓库后，按照本仓库的脚本，会在应用目录下执行 `mirror.sh` 进行镜像源替换。
 
