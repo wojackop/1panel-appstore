@@ -42,7 +42,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-GIT_REPO="https://cnb.cool/Liiiu/appstore"
+GIT_REPO="https://cnb.cool/gyhwd.top/1panel-appstore"
 TMP_DIR="/opt/1panel/resource/apps/local/appstore-localApps"
 LOCAL_APPS_DIR="/opt/1panel/resource/apps/local"
 
